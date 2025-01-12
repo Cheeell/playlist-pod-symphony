@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store, ArrowLeft, Search, Windows } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store, ArrowLeft, Search, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
@@ -106,7 +106,7 @@ export const MusicPlayer = () => {
           <ArrowLeft className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="icon">
-          <Windows className="h-6 w-6" />
+          <Home className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="icon">
           <Search className="h-6 w-6" />
