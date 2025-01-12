@@ -1,6 +1,6 @@
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
-const CLIENT_ID = 'YOUR_CLIENT_ID'; // This should be replaced with user's client ID
+const CLIENT_ID = 'b79d5992990d40bb84bfe92a02480cc2'; // This should be replaced with user's client ID
 const REDIRECT_URI = window.location.origin;
 const SCOPES = [
   'user-read-private',
