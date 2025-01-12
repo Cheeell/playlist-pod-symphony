@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store, ArrowLeft, Search, Windows } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { cn } from '@/lib/utils';
 
 interface Song {
   id: string;
@@ -9,17 +10,21 @@ interface Song {
   artist: string;
 }
 
-const menuItems = [
-  { icon: <Music2 className="h-5 w-5" />, label: 'music' },
-  { icon: <Video className="h-5 w-5" />, label: 'videos' },
-  { icon: <Podcast className="h-5 w-5" />, label: 'podcasts' },
-  { icon: <Radio className="h-5 w-5" />, label: 'radio' },
-  { icon: <Store className="h-5 w-5" />, label: 'marketplace' },
+const tabs = ['favorites', 'playlists', 'songs', 'albums', 'artists'];
+
+const sampleSongs = [
+  { id: '1', title: 'Feeling good', artist: 'Muse' },
+  { id: '2', title: 'Today, the end of days', artist: 'Hypnostate' },
+  { id: '3', title: 'Of all living creatures, why a human being?', artist: 'Alondra Bentley, Joserra Senperena' },
+  { id: '4', title: 'Excuses', artist: 'The morning benders' },
+  { id: '5', title: 'Kingdom of rust', artist: 'Doves' },
+  { id: '6', title: 'Seventeen years', artist: 'Ratatat' },
 ];
 
 export const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
+  const [activeTab, setActiveTab] = useState('favorites');
   const { toast } = useToast();
 
   const handleFileImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,37 +44,90 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-md mx-auto">
-      <header className="p-6">
-        <h1 className="metro-text bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text">
-          music
+    <div className="flex flex-col min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="p-6 pb-2">
+        <h1 className="text-2xl font-extralight tracking-wide uppercase">
+          WEPLAY
         </h1>
       </header>
 
-      <nav className="mb-8">
-        {menuItems.map((item, index) => (
-          <div key={index} className="metro-list-item flex items-center gap-4">
-            {item.icon}
-            <span className="font-light">{item.label}</span>
-          </div>
+      {/* Tabs */}
+      <div className="flex overflow-x-auto no-scrollbar px-6 space-x-4">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={cn(
+              "text-4xl font-extralight tracking-wide whitespace-nowrap transition-colors",
+              activeTab === tab ? "text-white" : "text-gray-500"
+            )}
+          >
+            {tab}
+          </button>
         ))}
-      </nav>
+      </div>
 
+      {/* Content */}
+      <div className="flex-1 px-6 py-4">
+        {activeTab === 'favorites' && (
+          <div className="space-y-6">
+            {sampleSongs.map((song) => (
+              <div
+                key={song.id}
+                className="cursor-pointer"
+                onClick={() => setCurrentSong(song)}
+              >
+                <h3 className="text-xl font-light">{song.title}</h3>
+                <p className="text-sm text-gray-500">{song.artist}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Import Music Button */}
+        <div className="mt-8">
+          <label className="metro-tile flex items-center justify-center gap-4 bg-transparent hover:bg-white/10 transition-colors">
+            <input
+              type="file"
+              accept="audio/*"
+              className="hidden"
+              onChange={handleFileImport}
+            />
+            <Plus className="h-6 w-6" />
+            <span className="font-light">Import Music</span>
+          </label>
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="flex justify-between items-center px-6 py-4 bg-zinc-900 mt-auto">
+        <Button variant="ghost" size="icon">
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+        <Button variant="ghost" size="icon">
+          <Windows className="h-6 w-6" />
+        </Button>
+        <Button variant="ghost" size="icon">
+          <Search className="h-6 w-6" />
+        </Button>
+      </div>
+
+      {/* Player Controls (when a song is selected) */}
       {currentSong && (
-        <div className="p-6">
-          <h2 className="metro-heading mb-2">now playing</h2>
-          <div className="metro-tile">
-            <h3 className="text-xl font-light mb-1">{currentSong.title}</h3>
-            <p className="metro-subtext">{currentSong.artist}</p>
+        <div className="fixed bottom-20 left-0 right-0 bg-zinc-900 p-4">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-light">{currentSong.title}</h3>
+            <p className="text-sm text-gray-500">{currentSong.artist}</p>
           </div>
 
-          <div className="flex justify-center gap-4 mt-6">
+          <div className="flex justify-center gap-4">
             <Button variant="ghost" size="icon">
               <SkipBack className="h-6 w-6" />
             </Button>
             
             <Button
-              variant="secondary"
+              variant="ghost"
               size="icon"
               className="h-12 w-12"
               onClick={() => setIsPlaying(!isPlaying)}
@@ -87,19 +145,6 @@ export const MusicPlayer = () => {
           </div>
         </div>
       )}
-
-      <div className="p-6">
-        <label className="metro-tile flex items-center justify-center gap-4">
-          <input
-            type="file"
-            accept="audio/*"
-            className="hidden"
-            onChange={handleFileImport}
-          />
-          <Plus className="h-6 w-6" />
-          <span className="font-light">Import Music</span>
-        </label>
-      </div>
     </div>
   );
 };
