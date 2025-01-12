@@ -25,21 +25,61 @@ export const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [activeTab, setActiveTab] = useState('favorites');
+  const [importedSongs, setImportedSongs] = useState<Song[]>([]);
   const { toast } = useToast();
 
   const handleFileImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      setCurrentSong({
+      const newSong = {
         id: Math.random().toString(),
         title: file.name.replace(/\.[^/.]+$/, ""),
         artist: 'Unknown Artist'
-      });
+      };
+      setImportedSongs(prev => [...prev, newSong]);
+      setActiveTab('songs'); // Switch to songs tab after import
       toast({
         title: "Music imported",
         description: `Added ${file.name} to your library`,
       });
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'favorites':
+        return (
+          <div className="space-y-6">
+            {sampleSongs.map((song) => (
+              <div
+                key={song.id}
+                className="cursor-pointer"
+                onClick={() => setCurrentSong(song)}
+              >
+                <h3 className="text-xl font-light">{song.title}</h3>
+                <p className="text-sm text-gray-500">{song.artist}</p>
+              </div>
+            ))}
+          </div>
+        );
+      case 'songs':
+        return (
+          <div className="space-y-6">
+            {importedSongs.map((song) => (
+              <div
+                key={song.id}
+                className="cursor-pointer"
+                onClick={() => setCurrentSong(song)}
+              >
+                <h3 className="text-xl font-light">{song.title}</h3>
+                <p className="text-sm text-gray-500">{song.artist}</p>
+              </div>
+            ))}
+          </div>
+        );
+      default:
+        return <div className="text-gray-500">No content available</div>;
     }
   };
 
@@ -70,20 +110,7 @@ export const MusicPlayer = () => {
 
       {/* Content */}
       <div className="flex-1 px-6 py-4">
-        {activeTab === 'favorites' && (
-          <div className="space-y-6">
-            {sampleSongs.map((song) => (
-              <div
-                key={song.id}
-                className="cursor-pointer"
-                onClick={() => setCurrentSong(song)}
-              >
-                <h3 className="text-xl font-light">{song.title}</h3>
-                <p className="text-sm text-gray-500">{song.artist}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        {renderContent()}
 
         {/* Import Music Button */}
         <div className="mt-8">
@@ -113,7 +140,7 @@ export const MusicPlayer = () => {
         </Button>
       </div>
 
-      {/* Player Controls (when a song is selected) */}
+      {/* Player Controls */}
       {currentSong && (
         <div className="fixed bottom-20 left-0 right-0 bg-zinc-900 p-4">
           <div className="text-center mb-4">
