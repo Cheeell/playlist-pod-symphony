@@ -1,8 +1,18 @@
-# Welcome to your Lovable project
+# Windows Phone-Inspired Music Player
+
+A modern web music player with a Windows Phone Metro UI design aesthetic. Built with React, TypeScript, and Tailwind CSS.
+
+## Features
+
+- Clean, minimalist interface inspired by Windows Phone design
+- Music playback controls
+- Library management with import functionality
+- Metro-style animations and transitions
+- Responsive design for all devices
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/0ad34bca-2401-428b-97b9-702090b5aa0c
+**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
 ## How can I edit this code?
 
@@ -10,7 +20,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0ad34bca-2401-428b-97b9-702090b5aa0c) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -36,34 +46,19 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Tech Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This project is built with React, TypeScript, Tailwind CSS, and shadcn/ui components.
 
-**Use GitHub Codespaces**
+- React for UI components
+- TypeScript for type safety
+- Tailwind CSS for styling
+- shadcn/ui for UI components
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deployment
 
-## What technologies are used for this project?
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0ad34bca-2401-428b-97b9-702090b5aa0c) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
+## Custom Domains
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
