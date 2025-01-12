@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store, ArrowLeft, Search, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { spotifyApi, fetchSpotifyPlaylists, fetchSpotifyTracks } from '../services/spotify';
 
 interface Song {
   id: string;
   title: string;
   artist: string;
+  uri?: string;
+}
+
+interface SpotifyPlaylist {
+  id: string;
+  name: string;
 }
 
 const tabs = ['favorites', 'playlists', 'songs', 'albums', 'artists'];
@@ -26,7 +33,37 @@ export const MusicPlayer = () => {
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [activeTab, setActiveTab] = useState('favorites');
   const [importedSongs, setImportedSongs] = useState<Song[]>([]);
+  const [spotifyPlaylists, setSpotifyPlaylists] = useState<SpotifyPlaylist[]>([]);
+  const [selectedPlaylistSongs, setSelectedPlaylistSongs] = useState<Song[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const initializeSpotify = async () => {
+      try {
+        await spotifyApi.authenticate();
+        const playlists = await fetchSpotifyPlaylists();
+        setSpotifyPlaylists(playlists);
+        toast({
+          title: "Spotify Connected",
+          description: "Successfully connected to Spotify",
+        });
+      } catch (error) {
+        console.error('Failed to initialize Spotify:', error);
+        toast({
+          title: "Connection Failed",
+          description: "Could not connect to Spotify",
+          variant: "destructive",
+        });
+      }
+    };
+
+    initializeSpotify();
+  }, []);
+
+  const handlePlaylistSelect = async (playlistId: string) => {
+    const tracks = await fetchSpotifyTracks(playlistId);
+    setSelectedPlaylistSongs(tracks);
+  };
 
   const handleFileImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -59,6 +96,37 @@ export const MusicPlayer = () => {
               >
                 <h3 className="text-xl font-light">{song.title}</h3>
                 <p className="text-sm text-gray-500">{song.artist}</p>
+              </div>
+            ))}
+          </div>
+        );
+      case 'playlists':
+        return (
+          <div className="space-y-6">
+            {spotifyPlaylists.map((playlist) => (
+              <div
+                key={playlist.id}
+                className="cursor-pointer"
+                onClick={() => handlePlaylistSelect(playlist.id)}
+              >
+                <h3 className="text-xl font-light">{playlist.name}</h3>
+                {selectedPlaylistSongs.length > 0 && (
+                  <div className="ml-4 mt-2 space-y-2">
+                    {selectedPlaylistSongs.map((song) => (
+                      <div
+                        key={song.id}
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentSong(song);
+                        }}
+                      >
+                        <h4 className="text-lg font-light">{song.title}</h4>
+                        <p className="text-sm text-gray-500">{song.artist}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
