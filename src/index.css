@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    --card: 222 47% 11%;
+    --card: 0 0% 3%;
     --card-foreground: 0 0% 100%;
-    --popover: 222 47% 11%;
+    --popover: 0 0% 3%;
     --popover-foreground: 0 0% 100%;
     --primary: 252 76% 75%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 217 33% 17%;
+    --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217 33% 17%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 64%;
+    --accent: 240 4% 16%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 100%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
     --ring: 252 76% 75%;
-    --radius: 0.5rem;
+    --radius: 0;
   }
 }
 
@@ -45,5 +45,17 @@
 }
 
 .metro-text {
-  @apply text-4xl font-light tracking-wide;
+  @apply text-5xl font-extralight tracking-wider;
+}
+
+.metro-list-item {
+  @apply py-4 px-6 hover:bg-secondary/50 metro-transition cursor-pointer;
+}
+
+.metro-heading {
+  @apply text-2xl font-extralight tracking-wider uppercase;
+}
+
+.metro-subtext {
+  @apply text-sm font-light text-muted-foreground;
 }

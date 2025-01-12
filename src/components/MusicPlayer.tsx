@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Plus } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Plus, Music2, Radio, Video, Podcast, Store } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -8,6 +8,14 @@ interface Song {
   title: string;
   artist: string;
 }
+
+const menuItems = [
+  { icon: <Music2 className="h-5 w-5" />, label: 'music' },
+  { icon: <Video className="h-5 w-5" />, label: 'videos' },
+  { icon: <Podcast className="h-5 w-5" />, label: 'podcasts' },
+  { icon: <Radio className="h-5 w-5" />, label: 'radio' },
+  { icon: <Store className="h-5 w-5" />, label: 'marketplace' },
+];
 
 export const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,70 +39,66 @@ export const MusicPlayer = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 p-6">
-        <div className="mb-8">
-          <h1 className="metro-text mb-2">Now Playing</h1>
-          <div className="metro-tile rounded-lg">
-            {currentSong ? (
-              <>
-                <h2 className="text-2xl font-light mb-2">{currentSong.title}</h2>
-                <p className="text-muted-foreground">{currentSong.artist}</p>
-              </>
-            ) : (
-              <p className="text-muted-foreground">No song selected</p>
-            )}
+    <div className="flex flex-col min-h-screen max-w-md mx-auto">
+      <header className="p-6">
+        <h1 className="metro-text bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-transparent bg-clip-text">
+          music
+        </h1>
+      </header>
+
+      <nav className="mb-8">
+        {menuItems.map((item, index) => (
+          <div key={index} className="metro-list-item flex items-center gap-4">
+            {item.icon}
+            <span className="font-light">{item.label}</span>
+          </div>
+        ))}
+      </nav>
+
+      {currentSong && (
+        <div className="p-6">
+          <h2 className="metro-heading mb-2">now playing</h2>
+          <div className="metro-tile">
+            <h3 className="text-xl font-light mb-1">{currentSong.title}</h3>
+            <p className="metro-subtext">{currentSong.artist}</p>
+          </div>
+
+          <div className="flex justify-center gap-4 mt-6">
+            <Button variant="ghost" size="icon">
+              <SkipBack className="h-6 w-6" />
+            </Button>
+            
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-12 w-12"
+              onClick={() => setIsPlaying(!isPlaying)}
+            >
+              {isPlaying ? (
+                <Pause className="h-6 w-6" />
+              ) : (
+                <Play className="h-6 w-6" />
+              )}
+            </Button>
+            
+            <Button variant="ghost" size="icon">
+              <SkipForward className="h-6 w-6" />
+            </Button>
           </div>
         </div>
+      )}
 
-        <div className="flex justify-center gap-4 mb-8">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => console.log('Previous')}
-          >
-            <SkipBack className="h-6 w-6" />
-          </Button>
-          
-          <Button
-            variant="secondary"
-            size="icon"
-            className="h-12 w-12"
-            onClick={() => setIsPlaying(!isPlaying)}
-          >
-            {isPlaying ? (
-              <Pause className="h-6 w-6" />
-            ) : (
-              <Play className="h-6 w-6" />
-            )}
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => console.log('Next')}
-          >
-            <SkipForward className="h-6 w-6" />
-          </Button>
-        </div>
-
-        <div>
-          <h2 className="metro-text mb-4">Library</h2>
-          <div className="grid gap-4">
-            <label className="metro-tile rounded-lg flex items-center justify-center">
-              <input
-                type="file"
-                accept="audio/*"
-                className="hidden"
-                onChange={handleFileImport}
-              />
-              <div className="flex flex-col items-center">
-                <Plus className="h-8 w-8 mb-2" />
-                <span>Import Music</span>
-              </div>
-            </label>
-          </div>
-        </div>
+      <div className="p-6">
+        <label className="metro-tile flex items-center justify-center gap-4">
+          <input
+            type="file"
+            accept="audio/*"
+            className="hidden"
+            onChange={handleFileImport}
+          />
+          <Plus className="h-6 w-6" />
+          <span className="font-light">Import Music</span>
+        </label>
       </div>
     </div>
   );
