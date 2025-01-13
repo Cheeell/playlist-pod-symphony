@@ -18,8 +18,12 @@ export const spotifyApi = SpotifyApi.withUserAuthorization(
 
 export const fetchSpotifyPlaylists = async () => {
   try {
-    const response = await spotifyApi.playlists.getUsersPlaylists();
-    return response.items;
+    const response = await spotifyApi.currentUser.playlists.playlists();
+    console.log('Fetched playlists:', response.items);
+    return response.items.map(playlist => ({
+      id: playlist.id,
+      name: playlist.name
+    }));
   } catch (error) {
     console.error('Error fetching playlists:', error);
     return [];
@@ -28,7 +32,8 @@ export const fetchSpotifyPlaylists = async () => {
 
 export const fetchSpotifyTracks = async (playlistId: string) => {
   try {
-    const response = await spotifyApi.playlists.getPlaylistTracks(playlistId);
+    const response = await spotifyApi.playlists.getPlaylistItems(playlistId);
+    console.log('Fetched tracks:', response.items);
     return response.items.map(item => ({
       id: item.track.id,
       title: item.track.name,
